@@ -2,6 +2,10 @@ import React from 'react'
 
 export default function Header() {
   return (
-    <div>Header</div>
+    <div className='bg-primary'>
+       <nav>
+        <p>home</p>
+       </nav>
+    </div>
   )
 }

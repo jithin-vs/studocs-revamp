@@ -17,27 +17,27 @@ app.set('view engine','ejs');
  
 
 //mysql session store
-var sessionstore =new mysqlStore({
-  expiration :10800000,
-  createDatabaseTable: true,
-  schema:{
-     tableName:'Sessions',
-     columnNames:{ 
-        session_id:'session id',
-        expires:'expires',
-        data:'data'
-     }
-  }
-},db.connection);
+// var sessionstore =new mysqlStore({
+//   expiration :10800000,
+//   createDatabaseTable: true,
+//   schema:{
+//      tableName:'Sessions',
+//      columnNames:{ 
+//         session_id:'session id',
+//         expires:'expires',
+//         data:'data'
+//      }
+//   }
+// },db.connection);
 
 //session setup
-app.use(session({
-  secret:process.env.SECRET_KEY,
-  store:sessionstore,
-  resave:false,
-  saveUninitialized:true,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }, 
-}));
+// app.use(session({
+//   secret:process.env.SECRET_KEY,
+//   store:sessionstore,
+//   resave:false,
+//   saveUninitialized:true,
+//   cookie: { maxAge: 24 * 60 * 60 * 1000 }, 
+// }));
 
  
 // Serve static files
@@ -67,7 +67,7 @@ const isAuth = (req,res,next) =>{
 const route =require('./routes/routes')(app,isAuth,encoder);
 
 // Start the server
-app.listen(3000, () => {
-  console.log('Studocs app is listening on port 3000.');
+app.listen(8000, () => {
+  console.log('Studocs app is listening on port 8000.');
 });   
   

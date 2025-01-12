@@ -8,17 +8,22 @@ const { query } = require('express');
 var routes =function(app,isAuth,encoder){      
   
    // Promisify the pool.query method
-    const query = (sql, args) => {
-      return new Promise((resolve, reject) => {
-        db.connection.query(sql, args, (error, results) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(results);
-          } 
-        });
-      });
-    };
+   try {
+    
+     const query = (sql, args) => {
+       return new Promise((resolve, reject) => {
+         db.connection.query(sql, args, (error, results) => {
+           if (error) {
+             reject(error);
+           } else {
+             resolve(results);
+           } 
+         });
+       });
+     };
+   } catch (error) {
+    console.log("db error")
+   }
     
 
     
