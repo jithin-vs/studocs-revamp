@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import logo from "../../../public/assets/img/logo.png";
 
-export default function Navbar() {
+export default function Header() {
   return (
     <div className="bg-primary flex justify-between p-4">
       <div className="flex">
@@ -18,6 +18,9 @@ export default function Navbar() {
           <a className="hover:text-secondary" href="#">Services</a>
           <a className="hover:text-secondary" href="#">Team</a>
           <a className="hover:text-secondary" href="#">Contact</a>
+          <a href="#" className="border border-secondary rounded-full px-5 py-2 hover:bg-secondary">
+            Get Started
+          </a>
         </div>
       </nav>
     </div>

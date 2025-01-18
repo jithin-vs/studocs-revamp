@@ -1,9 +1,9 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import Header from "@/components/layout/header";
+import Navbar from "@/components/layout/navbar";
 
 export default function Home() {
   return (
-    <Header/>
+    <Navbar/>
   );
 }
