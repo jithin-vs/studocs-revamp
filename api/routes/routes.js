@@ -5,7 +5,7 @@ const verify =require("../controller/verification");
 const path=require('path');
 const { query } = require('express');
 
-var routes =function(app,isAuth,encoder){      
+var routes =function(app,encoder){      
   
    // Promisify the pool.query method
    try {
@@ -53,12 +53,12 @@ var routes =function(app,isAuth,encoder){
             res.render('inner-page');
       });
      
-    app.get('/Principal',isAuth,(req, res) => {
+    app.get('/Principal',(req, res) => {
         res.render('Principal');  
     });
 
       //forms
-      app.get('/tform', isAuth, (req, res) => {
+      app.get('/tform',  (req, res) => {
         var name = req.query.id;
         var user = req.query.user;
         console.log('ID:', name);
@@ -75,7 +75,7 @@ var routes =function(app,isAuth,encoder){
         });
     });
     
-    app.get('/sform/:name',isAuth,(req, res) => {
+    app.get('/sform/:name',(req, res) => {
 
         var name=req.params.name;
         db.connection.query("select * from student where id=?",
@@ -92,7 +92,7 @@ var routes =function(app,isAuth,encoder){
          }
       });    
     }); 
-    app.get('/cform/:name',isAuth, (req, res) => {
+    app.get('/cform/:name', (req, res) => {
       var name=req.params.name;
       db.connection.query("select * from college where collegeid=?",
       [name],(err,results,fields)=>{
@@ -107,7 +107,7 @@ var routes =function(app,isAuth,encoder){
       }
       });
     });
-    app.get('/pform/:name',isAuth, (req, res) => {
+    app.get('/pform/:name', (req, res) => {
 
        var name=req.params.name;
         db.connection.query("select * from principal where id=?",
@@ -304,7 +304,7 @@ var routes =function(app,isAuth,encoder){
     /*------dashboards-------*/   
 
     //staffadvisor
-    app.get('/staffadvisor/:id',isAuth,async(req, res) => {
+    app.get('/staffadvisor/:id',async(req, res) => {
        
       if(req.session.user){
         const username = req.params.id;
@@ -335,7 +335,7 @@ var routes =function(app,isAuth,encoder){
     });
 //hod
 
-   app.get('/hod/:name', isAuth, async(req, res) => {
+   app.get('/hod/:name',  async(req, res) => {
   if (req.session.user) {
     try {
       const username = req.params.name;
@@ -372,7 +372,7 @@ var routes =function(app,isAuth,encoder){
     //hod
  
     //Principal
-    app.get('/Principal/:name',isAuth,async(req, res) => {
+    app.get('/Principal/:name',async(req, res) => {
       console.log(req.params.name);
       if(req.session.user){  
         try{
@@ -411,7 +411,7 @@ var routes =function(app,isAuth,encoder){
     }); 
 
    //Student
-    app.get('/student/:name',isAuth,async(req, res) => {
+    app.get('/student/:name',async(req, res) => {
       console.log(req.params.name);
       if(req.session.user){
         try{
@@ -450,7 +450,7 @@ var routes =function(app,isAuth,encoder){
     
     //Office
 
-     app.get('/college/:name',isAuth,async(req, res) => {
+     app.get('/college/:name',async(req, res) => {
       var username=req.params.name;    
       if(req.session.user){
         if (req.session.user) {
@@ -514,7 +514,7 @@ var routes =function(app,isAuth,encoder){
      /*-----add user pages-----*/
 
      //tutor
-      app.get('/tutoradd',isAuth,async(req,res)=>{     
+      app.get('/tutoradd',async(req,res)=>{     
         
         const query1 = 'SELECT collegeid,department FROM hod WHERE  id = ?';
         const query1Result = await query(query1, [req.query.id]);
@@ -575,7 +575,7 @@ var routes =function(app,isAuth,encoder){
      
     
      //add new HOD   
-     app.get('/hodadd',isAuth,async(req,res)=>{  
+     app.get('/hodadd',async(req,res)=>{  
       console.log("at route="+req.query.id)    
       const query1 = 'SELECT collegeid FROM principal WHERE  id = ?';
       const query1Result = await query(query1, [req.query.id]);
@@ -631,7 +631,7 @@ var routes =function(app,isAuth,encoder){
 
  
       //student add  
-     app.get('/studentadd',isAuth,async(req,res)=>{
+     app.get('/studentadd',async(req,res)=>{
             
       const query1 = 'SELECT collegeid,batch,department FROM tutor WHERE  id = ?';
       const query1Result = await query(query1, [req.query.id]);
@@ -690,7 +690,7 @@ var routes =function(app,isAuth,encoder){
          });
 
     //principal add
-     app.get('/principaladd',isAuth,(req,res)=>{
+     app.get('/principaladd',(req,res)=>{
            
              
           db.connection.query("select * from  principal",
@@ -740,7 +740,7 @@ var routes =function(app,isAuth,encoder){
       /*-----------REQUEST HANDLING ROUTES ------*/
       
   // SENDING REQUEST ROUTE FOR STUDENTS        
-  app.get('/requests', isAuth,async(req, res) => {
+  app.get('/requests', async(req, res) => {
     let id=req.query.id;
     const query1 = 'SELECT collegeid FROM student WHERE  id = ?';
     const query1Result = await query(query1, [id]);
@@ -760,7 +760,7 @@ var routes =function(app,isAuth,encoder){
   });
         
   //SUBMIT FORM
-  app.get('/submit',isAuth,async(req,res)=>{ 
+  app.get('/submit',async(req,res)=>{ 
     const jsonData = req.query.data;
     const data = JSON.parse(jsonData); 
     const formid = data[0].formid; // Accessing the 'formid' property
@@ -834,7 +834,7 @@ var routes =function(app,isAuth,encoder){
          /*-------------------- VERIFIED REQUESTS  --------------------*/
 
    // SENDING REQUEST ROUTE FOR STUDENTS 
-   app.get('/verified-requests',isAuth,async(req,res)=>{ 
+   app.get('/verified-requests',async(req,res)=>{ 
    try{
     
     const query1= `
@@ -867,7 +867,7 @@ var routes =function(app,isAuth,encoder){
    
    });
 
-   app.get('/tutor-verified-requests',isAuth,async(req,res)=>{ 
+   app.get('/tutor-verified-requests',async(req,res)=>{ 
       
         const query1 = 'SELECT collegeid,batch,department FROM tutor WHERE  id = ?';
         const query1Result = await query(query1, [req.query.id]);
@@ -888,7 +888,7 @@ var routes =function(app,isAuth,encoder){
         res.render('teacher_verified_requests',{id:req.query.id,applications:query2Result});
     }); 
 
-   app.get('/hod-verified-requests',isAuth,async(req,res)=>{ 
+   app.get('/hod-verified-requests',async(req,res)=>{ 
                 
         const query1 = 'SELECT collegeid,department FROM hod WHERE id = ?';
         const query1Result = await query(query1, [req.query.id]);
@@ -909,7 +909,7 @@ var routes =function(app,isAuth,encoder){
         res.render('pending-requests',{id:req.query.id,applications:query2Result});
       });
 
-   app.get('/principal-verified-requests',isAuth,async(req,res)=>{ 
+   app.get('/principal-verified-requests',async(req,res)=>{ 
       
         const query1 = 'SELECT collegeid FROM principal WHERE id = ?';
         const query1Result = await query(query1, [req.query.id]); 
@@ -928,7 +928,7 @@ var routes =function(app,isAuth,encoder){
         
         });
 
-   app.get('/office-verified-requests',isAuth,async(req,res)=>{ 
+   app.get('/office-verified-requests',async(req,res)=>{ 
             
             var checkVal1='verified';
             var checkVal2='completed';
@@ -946,7 +946,7 @@ var routes =function(app,isAuth,encoder){
        /*-------------------- PENDING REQUESTS  --------------------*/  
      
    // PENDING REQUEST ROUTE FOR ADMINS 
-   app.get('/office-pending-requests',isAuth,async(req,res)=>{         
+   app.get('/office-pending-requests',async(req,res)=>{         
         
     var pending1='pending';
     var pending2='final:pending';  
@@ -961,7 +961,7 @@ var routes =function(app,isAuth,encoder){
     });
 
     //PENDING REQUESTS FOR TUTOR
-   app.get('/tutor-pending-requests',isAuth,async(req,res)=>{          
+   app.get('/tutor-pending-requests',async(req,res)=>{          
         
       const query1 = 'SELECT collegeid,batch,department FROM tutor WHERE  id = ?';
       const query1Result = await query(query1, [req.query.id]);
@@ -981,7 +981,7 @@ var routes =function(app,isAuth,encoder){
       });
 
       //PENDING REQUESTS FOR PRINCIPAL
-   app.get('/principal-pending-requests',isAuth,async(req,res)=>{         
+   app.get('/principal-pending-requests',async(req,res)=>{         
         
         const query1 = 'SELECT collegeid FROM principal WHERE id = ?';
         const query1Result = await query(query1, [req.query.id]);  
@@ -999,7 +999,7 @@ var routes =function(app,isAuth,encoder){
         });
 
         //PENDING REQUESTS FOR HOD
-   app.get('/hod-pending-requests',isAuth,async(req,res)=>{         
+   app.get('/hod-pending-requests',async(req,res)=>{         
         
           const query1 = 'SELECT collegeid,department FROM hod WHERE id = ?';
           const query1Result = await query(query1, [req.query.id]);
@@ -1021,7 +1021,7 @@ var routes =function(app,isAuth,encoder){
 /*----------- FORM CONTROL AND MAANGEMENT -------------*/
 
       // ADDING TEMPLATE 
-      app.get('/addtemplate',isAuth,async(req,res)=>{         
+      app.get('/addtemplate',async(req,res)=>{         
         try{
           const id=req.query.id; 
           const query1 = 'SELECT name FROM forms WHERE  collegeid = ?';
@@ -1035,7 +1035,7 @@ var routes =function(app,isAuth,encoder){
         }  
       });
       
-      app.get('/get-templates',isAuth, (req, res) => {
+      app.get('/get-templates', (req, res) => {
         
         try{
           db.connection.query("select * from forms",
@@ -1056,7 +1056,7 @@ var routes =function(app,isAuth,encoder){
       });
       
       //STATUS table  DISPLAY
-      app.get('/status/:name',isAuth,async(req,res)=>{
+      app.get('/status/:name',async(req,res)=>{
         try{
           const query1= `
           SELECT distinct
@@ -1139,7 +1139,7 @@ var routes =function(app,isAuth,encoder){
     
 
     //REQUEST DISPLAY
-    app.get('/form/:selectedFormId',isAuth, (req, res) => {
+    app.get('/form/:selectedFormId', (req, res) => {
       const formId = req.params.selectedFormId;
     console.log(formId);
       db.connection.query("SELECT formdata FROM forms WHERE formid = ?", [formId], (err, results) => {
@@ -1158,7 +1158,7 @@ var routes =function(app,isAuth,encoder){
     });
     
       //REQUEST DISPLAY
-      app.get('/requ/:selectedFormId',isAuth, (req, res) => {
+      app.get('/requ/:selectedFormId', (req, res) => {
         const formId = req.params.selectedFormId;
         db.connection.query("SELECT request_data FROM requests WHERE appid = ?", [formId], (err, results) => {
           if (err) {
@@ -1199,7 +1199,7 @@ var routes =function(app,isAuth,encoder){
    });
    
      //ADD OR EDIT FORMS
-     app.get('/addnewform',isAuth,(req, res) => {
+     app.get('/addnewform',(req, res) => {
       const id= req.query.id;
       const templateName = req.query.name; // Get the template name from the query parameter
   
@@ -1591,7 +1591,7 @@ var routes =function(app,isAuth,encoder){
       });    
        
       //OTP VERIFICATION
-      app.get('/otpverify',isAuth,(req, res) => {
+      app.get('/otpverify',(req, res) => {
         const jsonData = req.query.data;
         const data = JSON.parse(jsonData);  
         const formid = data[0].formid; // Accessing the 'formid' property
@@ -1614,7 +1614,7 @@ var routes =function(app,isAuth,encoder){
        });
 
       //OTP VERIFICATION
-      app.post('/otpverify',isAuth,(req, res) => {
+      app.post('/otpverify',(req, res) => {
         console.log(req.body)  
         const jsonData = req.body.jsonData;
         const submittedOTP = req.body.otp;
@@ -1682,7 +1682,7 @@ var routes =function(app,isAuth,encoder){
        
 
       //render in edit in student requestes
-      app.get('/edit', isAuth,(req, res) => {
+      app.get('/edit', (req, res) => {
         const formid = req.query.Formid;
         const id=req.query.id;
         

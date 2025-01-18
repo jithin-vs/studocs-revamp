@@ -64,7 +64,7 @@ const isAuth = (req,res,next) =>{
   }
 }
 
-const route =require('./routes/routes')(app,isAuth,encoder);
+const route =require('./routes/routes')(app,encoder);
 
 // Start the server
 app.listen(8000, () => {
